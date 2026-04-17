@@ -1,0 +1,46 @@
+run_name: baseline
+model: baseline
+seed: 42
+device: cuda
+checkpoint_dir: checkpoints
+result_dir: results
+
+data:
+  input_dir: data/raw/images
+  target_dir:
+  patch_size: 256
+  val_ratio: 0.1
+  augment: true
+  max_images:
+
+loader:
+  batch_size: 4
+  num_workers: 2
+  pin_memory: true
+
+model_args:
+  base_ch: 32
+  residual_scale: 0.2
+
+train:
+  epochs: 50
+  lr: 0.0002
+  weight_decay: 0.0001
+  grad_clip: 1.0
+  amp: true
+  resume:
+  log_interval: 20
+
+loss:
+  exposure_target: 0.55
+  weights:
+    color: 0.8
+    exposure: 1.0
+    structure: 1.0
+    edge: 0.5
+    tv: 0.03
+    physics: 0.0
+    supervised_l1: 0.0
+    supervised_charbonnier: 0.0
+    supervised_ssim: 0.0
+

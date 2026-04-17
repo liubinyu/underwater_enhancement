@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environments
+.venv/
+venv/
+env/
+*.env
+
+# Large local data and generated artifacts
+data/raw/
+data/processed/
+outputs/
+results/
+checkpoints/
+*.pth
+*.pt
+*.onnx
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
