@@ -18,8 +18,8 @@ def main() -> None:
     train.add_argument("--config", default=str(ROOT / "configs" / "physics_guided.yaml"))
     infer = sub.add_parser("infer")
     infer.add_argument("--config", default=str(ROOT / "configs" / "physics_guided.yaml"))
-    infer.add_argument("--checkpoint", required=True)
-    infer.add_argument("--input", required=True)
+    infer.add_argument("--checkpoint", default="")
+    infer.add_argument("--input", default=str(ROOT / "data" / "raw" / "images"))
     args, extra = parser.parse_known_args()
 
     script = {
@@ -33,11 +33,12 @@ def main() -> None:
     if args.cmd in {"train", "infer"}:
         cmd += ["--config", args.config]
     if args.cmd == "infer":
-        cmd += ["--checkpoint", args.checkpoint, "--input", args.input]
+        if args.checkpoint:
+            cmd += ["--checkpoint", args.checkpoint]
+        cmd += ["--input", args.input]
     cmd += extra
     raise SystemExit(subprocess.call(cmd, cwd=str(ROOT)))
 
 
 if __name__ == "__main__":
     main()
-

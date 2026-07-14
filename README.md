@@ -183,6 +183,23 @@ python scripts/train.py --config configs/physics_guided.yaml
 
 ## 推理单张图
 
+VS Code 中直接运行 `scripts/infer.py` 时，会使用默认配置：
+
+```text
+config: configs/physics_guided.yaml
+checkpoint: checkpoints/physics_guided/best.pth，若不存在则尝试 latest.pth
+input: data/raw/images
+output: results/inference_physics_guided
+```
+
+因此训练完成后，最简单的推理方式是：
+
+```bash
+python scripts/infer.py
+```
+
+如果需要覆盖默认路径，再传命令行参数：
+
 ```bash
 python scripts/infer.py ^
   --config configs/physics_guided.yaml ^

@@ -21,6 +21,14 @@ def load_cfg(path: str | Path) -> dict:
         return yaml.safe_load(f)
 
 
+def default_checkpoint_from_config(config: dict) -> Path:
+    run_name = config.get("run_name", config.get("model", "physics_guided"))
+    ckpt_dir = ROOT / config.get("checkpoint_dir", "checkpoints") / run_name
+    best = ckpt_dir / "best.pth"
+    latest = ckpt_dir / "latest.pth"
+    return best if best.exists() else latest
+
+
 def load_model(config: dict, checkpoint: str, device: torch.device):
     model = build_model(config["model"], config).to(device)
     ckpt = torch.load(checkpoint, map_location=device)
@@ -32,9 +40,9 @@ def load_model(config: dict, checkpoint: str, device: torch.device):
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default=str(ROOT / "configs" / "physics_guided.yaml"))
-    parser.add_argument("--checkpoint", type=str, required=True)
-    parser.add_argument("--input", type=str, required=True)
-    parser.add_argument("--output_dir", type=str, default=str(ROOT / "results" / "inference"))
+    parser.add_argument("--checkpoint", type=str, default="")
+    parser.add_argument("--input", type=str, default=str(ROOT / "data" / "raw" / "images"))
+    parser.add_argument("--output_dir", type=str, default="")
     parser.add_argument("--tile_size", type=int, default=1024)
     parser.add_argument("--overlap", type=int, default=96)
     parser.add_argument("--device", type=str, default="cuda")
@@ -43,13 +51,27 @@ def main() -> None:
 
     cfg = load_cfg(args.config)
     device = torch.device(args.device if args.device == "cpu" or torch.cuda.is_available() else "cpu")
-    model = load_model(cfg, args.checkpoint, device)
+    checkpoint = Path(args.checkpoint) if args.checkpoint else default_checkpoint_from_config(cfg)
+    if not checkpoint.exists():
+        raise FileNotFoundError(
+            "Checkpoint not found. Train the model first or pass --checkpoint explicitly.\n"
+            f"Expected default checkpoint: {checkpoint}"
+        )
+    model = load_model(cfg, str(checkpoint), device)
     in_path = Path(args.input)
     paths = scan_images(in_path)
     if not paths:
         raise FileNotFoundError(f"No images found: {args.input}")
 
-    out_root = ensure_dir(args.output_dir)
+    if args.output_dir:
+        out_root = ensure_dir(args.output_dir)
+    else:
+        run_name = cfg.get("run_name", cfg.get("model", "physics_guided"))
+        out_root = ensure_dir(ROOT / "results" / f"inference_{run_name}")
+    print(f"Config: {args.config}")
+    print(f"Checkpoint: {checkpoint}")
+    print(f"Input images: {len(paths)}")
+    print(f"Output dir: {out_root}")
     metric_rows = []
     for p in paths:
         img = load_image(p)
