@@ -1,0 +1,6 @@
+# Local Windows/CPU environment for the existing enhancement networks.
+-r requirements-base.txt
+
+opencv-python>=4.8,<5
+torch>=2.3
+torchvision>=0.18

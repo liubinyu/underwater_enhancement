@@ -5,6 +5,7 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+tests/.pytest_tmp/
 
 # Environments
 .venv/
@@ -15,6 +16,10 @@ env/
 # Large local data and generated artifacts
 data/raw/
 data/processed/
+data/candidates/*
+!data/candidates/.gitkeep
+reports/figures/*
+!reports/figures/.gitkeep
 outputs/
 results/
 checkpoints/
@@ -32,4 +37,3 @@ checkpoints/
 .vscode/
 .DS_Store
 Thumbs.db
-

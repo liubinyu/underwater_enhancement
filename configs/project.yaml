@@ -1,0 +1,16 @@
+project:
+  name: AquaAlign-VLM
+  seed: 42
+
+model:
+  name: Qwen/Qwen3-VL-4B-Instruct
+
+paths:
+  data_dir: data
+  output_dir: outputs
+  report_dir: reports
+  figure_dir: figures
+
+logging:
+  level: INFO
+  format: "%(asctime)s | %(levelname)s | %(name)s | %(message)s"

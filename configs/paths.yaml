@@ -1,9 +1,7 @@
-project_root: D:/study/02_science_product/underwater_enhancement
-
-raw_images: D:/study/02_science_product/underwater_enhancement/data/raw/images
-
-baseline_outputs: D:/study/02_science_product/underwater_enhancement/outputs/baselines
-wb_outputs: D:/study/02_science_product/underwater_enhancement/outputs/baselines/white_balance
-cc_outputs: D:/study/02_science_product/underwater_enhancement/outputs/baselines/color_compensation
-clahe_outputs: D:/study/02_science_product/underwater_enhancement/outputs/baselines/clahe
-retinex_outputs: D:/study/02_science_product/underwater_enhancement/outputs/baselines/retinex
+project_root: .
+raw_images: data/raw/images
+baseline_outputs: outputs/baselines
+wb_outputs: outputs/baselines/white_balance
+cc_outputs: outputs/baselines/color_compensation
+clahe_outputs: outputs/baselines/clahe
+retinex_outputs: outputs/baselines/retinex

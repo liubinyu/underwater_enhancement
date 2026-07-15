@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aqua-align-vlm"
+version = "0.1.0"
+description = "Underwater image diagnosis and enhancement preference alignment"
+readme = "README.md"
+requires-python = ">=3.10,<3.12"
+dependencies = [
+  "numpy>=1.24",
+  "Pillow>=10.0",
+  "scipy>=1.10",
+  "PyYAML>=6.0",
+  "pydantic>=2.7",
+]
+
+[project.optional-dependencies]
+train = [
+  "torch>=2.8,<2.12",
+  "torchvision>=0.23",
+  "transformers>=4.57.6,<5",
+  "ms-swift>=4.2,<5",
+  "peft>=0.11,<0.20",
+  "trl>=0.15,<1.0",
+  "accelerate>=1.0",
+  "bitsandbytes>=0.49,<0.50",
+  "qwen-vl-utils>=0.0.14",
+]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools.packages.find]
+include = ["aqua_align*"]
+
+[tool.pytest.ini_options]
+addopts = "-ra -p no:cacheprovider"
+testpaths = ["tests"]
+norecursedirs = [".pytest_tmp"]

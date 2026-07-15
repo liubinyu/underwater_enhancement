@@ -1,0 +1,44 @@
+seed: 42
+
+dataset:
+  source_name: UIEB
+  split_ratios:
+    train: 0.70
+    val: 0.15
+    test: 0.15
+
+candidate_generation:
+  jpeg_quality: 95
+  methods:
+    gray_world:
+      enabled: true
+      max_gain: 4.0
+    white_patch:
+      enabled: true
+      percentile: 99.5
+      max_gain: 4.0
+    clahe:
+      enabled: true
+      clip_limit: 2.0
+      tile_grid_size: 8
+    gamma:
+      enabled: true
+      values: [0.6, 0.8, 1.2]
+    simplest_color_balance:
+      enabled: true
+      percent: 1.0
+    retinex:
+      enabled: true
+      sigmas: [15.0, 80.0, 250.0]
+      low_percentile: 1.0
+      high_percentile: 99.0
+    white_balance_clahe:
+      enabled: true
+      max_gain: 4.0
+      clip_limit: 2.0
+      tile_grid_size: 8
+
+quality_metrics:
+  dark_threshold: 15
+  saturated_threshold: 250
+  identical_psnr_db: 100.0

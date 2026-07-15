@@ -1,5 +1,11 @@
 # Physical-Guided Lightweight Underwater Image Enhancement
 
+增强算法、公式、当前UIEB小样本结果及后续路线详见：
+[AquaAlign-VLM 水下图像增强算法实现与后续方向](docs/underwater_enhancement_methods.md)。
+
+项目目录职责、输入输出和PowerShell完整运行方法详见：
+[AquaAlign-VLM 项目框架与运行指南](docs/project_framework_and_usage.md)。
+
 这是一个面向个人水下图像数据的 PyTorch 工程第一版，重点是“可运行、可训练、可推理、可解释”。项目不封装第三方增强模型，而是实现了两个可训练网络：
 
 - `baseline`: 纯深度学习轻量 encoder-decoder，用作对照组。
@@ -78,14 +84,60 @@ underwater_enhancement/
 
 ## 安装依赖
 
-建议使用虚拟环境：
+项目统一使用名为 `aqua_align` 的 Conda 环境。本地图像增强阶段不需要安装
+ms-swift、bitsandbytes 或下载视觉语言模型：
 
 ```bash
-cd D:\study\02_science_product\underwater_enhancement
-pip install -r requirements.txt
+conda create -n aqua_align python=3.11 -y  # 仅首次创建时执行
+conda activate aqua_align
+python -m pip install -r requirements-local.txt
 ```
 
-如果你使用 CUDA，请按本机 CUDA 版本从 PyTorch 官网安装对应的 `torch`。
+A40 服务器同样使用 `aqua_align` 作为环境名。先根据服务器驱动从 PyTorch 官方安装
+选择器安装 CUDA 版 PyTorch，再安装训练依赖，避免误装 CPU 版 PyTorch：
+
+```bash
+conda create -n aqua_align python=3.11 -y
+conda activate aqua_align
+# 在这里执行 https://pytorch.org/get-started/locally/ 生成的 CUDA PyTorch 安装命令
+python -m pip install -r requirements-server.txt
+python scripts/check_environment.py
+```
+
+`requirements.txt` 默认等价于本地安装入口。`flash-attn` 是可选加速项，应在基础 smoke
+test 成功后再根据服务器的 PyTorch/CUDA 组合单独安装。
+
+## AquaAlign-VLM 传统候选数据流水线
+
+整理 UIEB 或目录结构等价的数据集：
+
+```bash
+python scripts/prepare_uieb.py \
+  --input-dir /path/to/UIEB \
+  --output-dir data/processed/uieb \
+  --seed 42
+```
+
+生成传统增强候选、质量指标和非交互式总览图：
+
+```bash
+python scripts/generate_candidates.py \
+  --metadata data/processed/uieb/metadata.csv \
+  --config configs/data.yaml \
+  --output-dir data/candidates
+
+python scripts/compute_quality_metrics.py \
+  --candidates data/processed/candidates.csv \
+  --output data/processed/quality_metrics.csv
+
+python scripts/create_comparison_figures.py \
+  --candidates data/processed/candidates.csv \
+  --metrics data/processed/quality_metrics.csv \
+  --output-dir reports/figures
+```
+
+所有 CSV 图像路径均相对于项目根目录。候选生成默认不覆盖已有结果；调试时可使用
+`--limit 10 --dry-run`，确认无误后再添加 `--overwrite` 执行重建。
 
 ## 数据准备
 
