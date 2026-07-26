@@ -1,0 +1,99 @@
+{
+  "rule_rows": 10,
+  "base_vlm_run": {
+    "status": "blocked",
+    "model": "Qwen/Qwen3-VL-4B-Instruct",
+    "prompt_version": "0.1",
+    "requested_tasks": [
+      "diagnose",
+      "strategy",
+      "compare",
+      "rank"
+    ],
+    "successful_inferences": 0,
+    "failed_inferences": 0,
+    "blocker": "config requires CUDA but torch.cuda.is_available() is false",
+    "fake_outputs_created": false
+  },
+  "actual_vlm_outputs_available": false,
+  "human_reviewed_diagnoses": 0,
+  "human_reviewed_preferences": 0,
+  "reports": {
+    "rule_diagnosis": {
+      "prediction_rows": 10,
+      "successful_rows": 10,
+      "coverage": 1.0,
+      "label_frequency": {
+        "blue_green_color_cast": 10,
+        "over_saturation": 7,
+        "possible_haze": 10,
+        "low_contrast": 9,
+        "blur": 5,
+        "possible_detail_loss": 3,
+        "low_light": 3
+      },
+      "human_reviewed_rows": 0,
+      "accuracy_metrics_available": false,
+      "note": "No completed human diagnosis labels were found; accuracy and F1 are intentionally not reported."
+    },
+    "vlm_diagnosis": {
+      "prediction_rows": 0,
+      "successful_rows": 0,
+      "coverage": 0.0,
+      "label_frequency": {},
+      "human_reviewed_rows": 0,
+      "accuracy_metrics_available": false,
+      "note": "No completed human diagnosis labels were found; accuracy and F1 are intentionally not reported."
+    },
+    "rule_strategy": {
+      "prediction_rows": 10,
+      "operation_frequency": {
+        "red_channel_compensation": 10,
+        "white_balance": 10,
+        "saturation_reduction": 7,
+        "clahe": 10,
+        "mild_sharpening": 5,
+        "gamma_correction": 3,
+        "retinex": 3
+      },
+      "human_reviewed_rows": 0,
+      "agreement_metrics_available": false,
+      "note": "No completed human strategy labels were found; top-k agreement is intentionally not reported."
+    },
+    "vlm_strategy": {
+      "prediction_rows": 0,
+      "operation_frequency": {},
+      "human_reviewed_rows": 0,
+      "agreement_metrics_available": false,
+      "note": "No completed human strategy labels were found; top-k agreement is intentionally not reported."
+    },
+    "vlm_ranking": {
+      "prediction_rows": 0,
+      "human_reviewed_pairs": 0,
+      "human_agreement_available": false,
+      "reference_metric_agreement_available": false,
+      "rule_agreement_available": false,
+      "note": "No matching completed human pair reviews; ranking accuracy is intentionally not reported."
+    },
+    "vlm_hallucination_screen": {
+      "rows_scanned": 0,
+      "detector_type": "keyword_screening_not_semantic_ground_truth",
+      "flag_counts": {},
+      "flag_rates": {
+        "unsupported_depth": 0.0,
+        "unsupported_location": 0.0,
+        "unsupported_camera": 0.0,
+        "invented_metric": 0.0,
+        "vividness_only": 0.0
+      },
+      "example_sample_ids": {
+        "unsupported_depth": [],
+        "unsupported_location": [],
+        "unsupported_camera": [],
+        "invented_metric": [],
+        "vividness_only": []
+      }
+    }
+  },
+  "conclusion": "Base VLM inference results are unavailable; no rule-versus-VLM quality conclusion can be made."
+}

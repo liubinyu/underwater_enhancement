@@ -1,0 +1,80 @@
+version: "0.1"
+description: Config-driven mapping from rule diagnosis to conservative enhancement operations.
+
+operation_order:
+  - denoise
+  - red_channel_compensation
+  - white_balance
+  - saturation_reduction
+  - gamma_correction
+  - retinex
+  - clahe
+  - mild_sharpening
+
+degradations:
+  blue_green_color_cast:
+    preferred: [red_channel_compensation, white_balance]
+    avoid: []
+    rationale: Compensate attenuated red response before global color balancing.
+  red_color_cast:
+    preferred: [white_balance]
+    avoid: [red_channel_compensation]
+    rationale: Balance channels without further increasing red.
+  low_light:
+    preferred: [gamma_correction, retinex]
+    avoid: []
+    rationale: Lift illumination conservatively while monitoring highlights and noise.
+  low_contrast:
+    preferred: [clahe]
+    avoid: []
+    rationale: Improve local contrast with a bounded clip limit.
+  blur:
+    preferred: [mild_sharpening]
+    avoid: []
+    rationale: Mild sharpening may improve edge visibility but cannot restore lost detail.
+  possible_haze:
+    preferred: [retinex, clahe]
+    avoid: []
+    rationale: Use cautious illumination and local-contrast adjustment; this is not physical dehazing.
+  over_saturation:
+    preferred: [saturation_reduction]
+    avoid: [retinex]
+    rationale: Reduce excessive chroma and avoid aggressive color amplification.
+  under_saturation:
+    preferred: [white_balance]
+    avoid: []
+    rationale: Correct channel imbalance first; do not optimize for vividness alone.
+  possible_noise:
+    preferred: [denoise]
+    avoid: [mild_sharpening]
+    rationale: Suppress noise before contrast operations and avoid noise-amplifying sharpening.
+  possible_detail_loss:
+    preferred: [mild_sharpening]
+    avoid: []
+    rationale: Only conservative sharpening is allowed; missing detail cannot be reconstructed by rules.
+
+defaults:
+  minimum_severity: 1
+  gamma_by_severity: {"1": 0.85, "2": 0.75, "3": 0.65}
+  clahe_clip_by_severity: {"1": 1.5, "2": 2.0, "3": 2.5}
+  denoise_strength_by_severity: {"1": 3, "2": 5, "3": 7}
+  sharpen_amount_by_severity: {"1": 0.20, "2": 0.35, "3": 0.50}
+  saturation_scale_by_severity: {"1": 0.90, "2": 0.80, "3": 0.70}
+
+conflicts:
+  noise:
+    trigger: possible_noise
+    force_first: denoise
+    remove: [mild_sharpening]
+    max_clahe_clip: 1.8
+  over_saturation:
+    trigger: over_saturation
+    remove: [retinex]
+  red_cast:
+    trigger: red_color_cast
+    remove: [red_channel_compensation]
+
+limitations:
+  - Strategy recommendations are rule-based candidates and require human review.
+  - Parameter values are engineering defaults, not validated optima for UIEB.
+  - The mapping does not claim to recover true colors, depth, or physically lost detail.

@@ -1,0 +1,5 @@
+﻿metric,value,interpretation
+rule_rows,10,descriptive count
+successful_base_vlm_inferences,0,actual saved inference count
+human_reviewed_diagnoses,0,completed reviews only
+human_reviewed_preferences,0,completed reviews only

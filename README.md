@@ -6,6 +6,9 @@
 项目目录职责、输入输出和PowerShell完整运行方法详见：
 [AquaAlign-VLM 项目框架与运行指南](docs/project_framework_and_usage.md)。
 
+规则化退化诊断、增强策略映射、人工审核和 Base VLM 零样本基线详见：
+[规则诊断与 Base VLM 零样本评测](docs/rule_diagnosis_and_zero_shot.md)。当前本机为 CPU 环境，已完成规则 smoke test；Qwen3-VL 真实推理尚未执行，相关入口会保留明确的阻塞记录而不会生成伪结果。
+
 这是一个面向个人水下图像数据的 PyTorch 工程第一版，重点是“可运行、可训练、可推理、可解释”。项目不封装第三方增强模型，而是实现了两个可训练网络：
 
 - `baseline`: 纯深度学习轻量 encoder-decoder，用作对照组。

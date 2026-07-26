@@ -1,0 +1,21 @@
+model:
+  name_or_path: Qwen/Qwen3-VL-4B-Instruct
+  local_files_only: true
+  trust_remote_code: true
+  device: cuda
+  torch_dtype: bfloat16
+
+generation:
+  max_new_tokens: 768
+  do_sample: false
+  temperature: 0.0
+  seed: 42
+
+prompt:
+  version: "v0.1"
+  language: en
+
+tasks: [diagnose, strategy, compare, rank]
+
+output:
+  root: outputs/base_vlm

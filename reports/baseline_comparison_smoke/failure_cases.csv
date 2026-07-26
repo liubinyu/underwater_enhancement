@@ -1,0 +1,2 @@
+﻿sample_id,task_type,error
+,preflight,config requires CUDA but torch.cuda.is_available() is false

@@ -1,0 +1,6 @@
+{
+  "diagnosis_rows": 50,
+  "preference_rows": 100,
+  "human_fields_initialized_blank": true,
+  "source_is_ground_truth": false
+}

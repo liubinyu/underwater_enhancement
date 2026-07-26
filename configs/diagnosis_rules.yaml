@@ -1,0 +1,216 @@
+version: "0.1"
+feature_version: "0.1"
+threshold_source: initial_heuristics_pending_train_split_review
+description: >-
+  Initial engineering thresholds for rule smoke tests. They are not physical
+  constants or human-verified ground truth and must be reviewed using train-only
+  calibration statistics and representative images.
+
+degradations:
+  blue_green_color_cast:
+    min_indicators: 2
+    indicators:
+      red_deficit:
+        direction: high
+        mild: 0.08
+        moderate: 0.18
+        severe: 0.30
+        weight: 1.0
+      blue_green_dominance:
+        direction: high
+        mild: 0.06
+        moderate: 0.14
+        severe: 0.25
+        weight: 0.9
+      lab_b_mean:
+        direction: low
+        mild: -2.0
+        moderate: -8.0
+        severe: -16.0
+        weight: 0.7
+
+  red_color_cast:
+    min_indicators: 2
+    indicators:
+      red_excess:
+        direction: high
+        mild: 0.08
+        moderate: 0.18
+        severe: 0.30
+        weight: 1.0
+      lab_a_mean:
+        direction: high
+        mild: 4.0
+        moderate: 10.0
+        severe: 18.0
+        weight: 0.8
+      red_to_green_ratio:
+        direction: high
+        mild: 1.10
+        moderate: 1.25
+        severe: 1.45
+        weight: 0.7
+
+  low_light:
+    min_indicators: 2
+    indicators:
+      mean_brightness:
+        direction: low
+        mild: 115.0
+        moderate: 85.0
+        severe: 55.0
+        weight: 1.0
+      dark_pixel_ratio:
+        direction: high
+        mild: 0.20
+        moderate: 0.40
+        severe: 0.65
+        weight: 0.9
+      extreme_dark_pixel_ratio:
+        direction: high
+        mild: 0.05
+        moderate: 0.18
+        severe: 0.40
+        weight: 0.7
+
+  low_contrast:
+    min_indicators: 2
+    indicators:
+      gray_std:
+        direction: low
+        mild: 52.0
+        moderate: 38.0
+        severe: 24.0
+        weight: 1.0
+      gray_percentile_range:
+        direction: low
+        mild: 120.0
+        moderate: 85.0
+        severe: 50.0
+        weight: 0.9
+      rms_contrast:
+        direction: low
+        mild: 0.20
+        moderate: 0.14
+        severe: 0.09
+        weight: 0.7
+
+  blur:
+    min_indicators: 2
+    indicators:
+      laplacian_variance:
+        direction: low
+        mild: 180.0
+        moderate: 90.0
+        severe: 40.0
+        weight: 1.0
+      sobel_gradient_mean:
+        direction: low
+        mild: 24.0
+        moderate: 14.0
+        severe: 7.0
+        weight: 0.9
+
+  possible_haze:
+    min_indicators: 2
+    indicators:
+      haze_proxy:
+        direction: high
+        mild: 0.38
+        moderate: 0.55
+        severe: 0.72
+        weight: 1.0
+      local_contrast_mean:
+        direction: low
+        mild: 22.0
+        moderate: 14.0
+        severe: 8.0
+        weight: 0.7
+      edge_density:
+        direction: low
+        mild: 0.22
+        moderate: 0.13
+        severe: 0.07
+        weight: 0.6
+
+  over_saturation:
+    min_indicators: 2
+    indicators:
+      hsv_saturation_mean:
+        direction: high
+        mild: 0.58
+        moderate: 0.72
+        severe: 0.86
+        weight: 0.8
+      high_saturation_pixel_ratio:
+        direction: high
+        mild: 0.22
+        moderate: 0.45
+        severe: 0.70
+        weight: 1.0
+
+  under_saturation:
+    min_indicators: 2
+    indicators:
+      hsv_saturation_mean:
+        direction: low
+        mild: 0.24
+        moderate: 0.14
+        severe: 0.07
+        weight: 1.0
+      colorfulness:
+        direction: low
+        mild: 30.0
+        moderate: 18.0
+        severe: 8.0
+        weight: 0.8
+
+  possible_noise:
+    min_indicators: 2
+    indicators:
+      noise_sigma_proxy:
+        direction: high
+        mild: 0.025
+        moderate: 0.050
+        severe: 0.090
+        weight: 1.0
+      high_frequency_energy:
+        direction: high
+        mild: 0.045
+        moderate: 0.085
+        severe: 0.140
+        weight: 0.7
+
+  possible_detail_loss:
+    min_indicators: 2
+    indicators:
+      laplacian_variance:
+        direction: low
+        mild: 140.0
+        moderate: 65.0
+        severe: 28.0
+        weight: 0.8
+      sobel_gradient_mean:
+        direction: low
+        mild: 20.0
+        moderate: 11.0
+        severe: 5.0
+        weight: 0.8
+      entropy:
+        direction: low
+        mild: 6.4
+        moderate: 5.4
+        severe: 4.2
+        weight: 0.5
+
+confidence:
+  inactive: 0.35
+  base_active: 0.55
+  agreement_bonus: 0.30
+  severity_bonus: 0.15
+
+limitations:
+  - 规则结果基于图像统计特征，不等同于人工标注
+  - 清晰度低只表示可能模糊或细节不足，不能证明相机失焦
+  - haze_proxy是辅助统计量，不能准确测量真实水下后向散射
+  - 无法仅根据单张图像准确推断真实水深、水体参数、海域或相机型号
