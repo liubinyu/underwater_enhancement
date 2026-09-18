@@ -1,0 +1,6 @@
+-r requirements-local.txt
+matplotlib>=3.7
+nbformat>=5.9
+nbclient>=0.10
+ipykernel>=6.29
+jupyterlab>=4.0

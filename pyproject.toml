@@ -17,6 +17,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+enhance = ["torch>=2.3"]
 train = [
   "torch>=2.8,<2.12",
   "torchvision>=0.23",
@@ -31,7 +32,10 @@ train = [
 dev = ["pytest>=8.0"]
 
 [tool.setuptools.packages.find]
-include = ["aqua_align*"]
+include = ["aqua_align*", "third_party*"]
+
+[tool.setuptools.package-data]
+"third_party.fgdpa" = ["LICENSE", "PROVENANCE.md", "upstream_config.yaml"]
 
 [tool.pytest.ini_options]
 addopts = "-ra -p no:cacheprovider"

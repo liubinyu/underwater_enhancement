@@ -37,3 +37,6 @@ checkpoints/
 .vscode/
 .DS_Store
 Thumbs.db
+.notebook_runtime/
+.jupyter_runtime/
+.ipynb_checkpoints/

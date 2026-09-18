@@ -1,5 +1,34 @@
 # Physical-Guided Lightweight Underwater Image Enhancement
 
+## 教学 Notebook：退化感知增强设计
+
+[中文教学模块](notebooks/01_degradation_aware_fgdpa_tutorial.ipynb) 包含退化特征、
+动态注意力融合、增强强度门控、初始化一致性与梯度检查、小样本训练、图表和消融练习。
+已保存执行输出；这是研究原型教学，不代表经过独立测试的新算法。
+
+```powershell
+conda activate aqua_align
+python -m pip install -r requirements-notebook.txt
+python scripts/execute_teaching_notebook.py
+```
+
+交互学习可在 VS Code/JupyterLab 中选择 `aqua_align` 内核，按单元格顺序运行。
+开发者使用 `scripts/build_teaching_notebook.py` 重新生成教学源文件（会清除已保存的执行输出）。
+
+## 新增：近期预训练方法 FGDPA（2026）
+
+已接入官方 FGDPA 轻量模型与预训练权重，支持 CPU/CUDA、原分辨率单图及目录增强，
+输出 PNG、前后对比图与可追溯运行记录。无需先训练。
+
+```powershell
+conda activate aqua_align
+python scripts/download_fgdpa.py
+python scripts/enhance_modern.py --input data/processed/uieb/raw --output-dir outputs/fgdpa_run --device cpu --limit 10
+```
+
+完整说明、方法来源与本地演示结果见 [FGDPA 使用指南](docs/modern_enhancement.md)。
+已有演示位于 `outputs/fgdpa_demo/`。预训练权重使用过 UIEB，演示指标不能视为独立测试集成绩。
+
 增强算法、公式、当前UIEB小样本结果及后续路线详见：
 [AquaAlign-VLM 水下图像增强算法实现与后续方向](docs/underwater_enhancement_methods.md)。
 
@@ -9,7 +38,7 @@
 规则化退化诊断、增强策略映射、人工审核和 Base VLM 零样本基线详见：
 [规则诊断与 Base VLM 零样本评测](docs/rule_diagnosis_and_zero_shot.md)。当前本机为 CPU 环境，已完成规则 smoke test；Qwen3-VL 真实推理尚未执行，相关入口会保留明确的阻塞记录而不会生成伪结果。
 
-这是一个面向个人水下图像数据的 PyTorch 工程第一版，重点是“可运行、可训练、可推理、可解释”。项目不封装第三方增强模型，而是实现了两个可训练网络：
+这是一个面向个人水下图像数据的 PyTorch 工程，重点是“可运行、可训练、可推理、可解释”。除新增的第三方 FGDPA 推理入口外，项目原有两个可训练网络：
 
 - `baseline`: 纯深度学习轻量 encoder-decoder，用作对照组。
 - `physics_guided`: 估计背景光 `A` 和传输图 `t(x)`，先按物理模型粗恢复，再用轻量网络 refinement。
